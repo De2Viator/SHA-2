@@ -13,7 +13,7 @@ std::string parseMessageToBinary(std::string message) {
     std::ostringstream parsedMessageStream;
     for (char& c : message) {
         int asciiValue = static_cast<int>(c);
-        std::string binaryString = std::bitset<BITSET_SIZE>(asciiValue).to_string();
+        std::string binaryString = std::bitset<8>(asciiValue).to_string();
         parsedMessageStream<<binaryString;
     }
     std::string parsedMessage = parsedMessageStream.str();
@@ -51,8 +51,8 @@ size SHR(size value, unsigned int shift) {
 }
 std::vector<std::string> divideByBlocks(std::string message) {
     std::vector<std::string> blocks;
-    for(unsigned long long i =0; i < message.length();i+=SHA_SIZE) {
-        std::string block = message.substr(i,SHA_SIZE);
+    for(unsigned long long i =0; i < message.length();i+=SHA_BLOCK_SIZE) {
+        std::string block = message.substr(i,SHA_BLOCK_SIZE);
         blocks.push_back(block);
     }
     return blocks;
@@ -123,10 +123,10 @@ std::string makeHash() {
     return hashStream.str();
 }
 std::string SHA_2(std::string initialMessage) {
-    std::string message = parseMessageToBinary(std::move(initialMessage));
+    std::string message = parseMessageToBinary(initialMessage);
     unsigned long long size = message.size();
 
-    if(message.length() % SHA_SIZE != SHA_SIZE_WITHOUT_MESSAGE_SIZE) padMessage(message);
+    padMessage(message);
     std::string hexedMessage = fromBnToHex(message);
     hexedMessage += hexSize(size);
     std::vector<std::string> blocks = divideByBlocks(hexedMessage);
@@ -137,8 +137,8 @@ std::string SHA_2(std::string initialMessage) {
     return hash;
 }
 int main() {
-    std::string message = "abcde";
+    std::string message = "TESTAAASSSASADAABBBBBBBBJJJJJJJJJKKKKKKKKKNNNNNNNNNNWZM";
     std::string hash = SHA_2(message);
-    std::cout<<hash;
+    std::cout<<"SHA-2 hash:"<<hash;
     return 0;
 }

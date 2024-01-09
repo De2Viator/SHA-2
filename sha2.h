@@ -13,6 +13,7 @@ typedef uint32_t size;
 }
 #define K_SIZE 64
 #define SHA_SIZE 512
+#define SHA_BLOCK_SIZE 128
 #define SHA_SIZE_WITHOUT_MESSAGE_SIZE 448
 #define BITS_SIZE 16
 #define START_WORDS_AMOUNT 16
